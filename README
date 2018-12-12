@@ -1,0 +1,23 @@
+This is an experiment with restoring vowels.
+
+parse.py : removes the time stamps for AMI data, producing a _clean text
+	usage: python parse.py text
+
+strip_vowels.py : removes all vowels from the _clean text, creates a _nv text
+		  if the word is a single vowel, it's not stripped
+	usage: python strip_vowels.py text_clea
+
+restore_vowels.py: restores unvowelized text, only supports bigram lms in ARPA format
+		   output restored text to stdin, redirect to save file
+	usage: python restore_vowels.py text_clean_nv vocab lm
+
+The text used in this experiment is the AMI train data. The language model was trained with:
+
+./ngram-count -text text -order 2 -limit-vocab -vocab vocab -unk -kndiscount -interpolate -lm lm
+
+
+restore_vowel.py implements the Viterbi algortihm and chooses the best sequences of words that fit
+the restoration.
+
+With the Viterbi algorithm implemented:
+     95.7794842586% (760083/793576)of words were correctly vowelized
