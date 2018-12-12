@@ -1,0 +1,39 @@
+import argparse
+
+def build_string_fst(sen_filename):
+ #   with open(unvowelized_dict) as f:
+ #      vocab_dict = {}
+ #      content = f.readlines()
+ #      for w in content:
+ #          w = w.split()
+ #          vocab_dict[w[0]] = int(w[1])
+    
+        text = open('s.text', 'w')
+        sen_file = open(sen_filename, 'r')
+
+        sen_content = sen_file.readlines()
+        sen = ""
+        # only read first line
+        for l in sen_content:
+            sen = l.split()
+            break
+
+        sen = ["<s>"] + sen + ["</s>"]
+        c = 0
+        for w in sen:
+            text.write(str(c) + " " + str(c+1) + " " + w + "\n")
+            c += 1
+
+        text.write(str(c))
+        text.close()
+        
+parser = argparse.ArgumentParser()
+#parser.add_argument("unvowelized")
+parser.add_argument("sen")
+
+args = parser.parse_args()
+
+#unvowelized = args.unvowelized
+sen = args.sen
+
+build_string_fst(sen)

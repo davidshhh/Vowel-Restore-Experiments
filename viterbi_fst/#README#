@@ -1,0 +1,28 @@
+v.py takes in the vocab, prepares three files: v.text unvowelized.txt vowelized.txt
+python v.py vocab
+
+v.fst is built by:
+./fstcompile -isymbols=unvowelized.txt -osymbols=vowelized.txt v.text > v.fst
+
+g.fst is built by using arpa2fst. The language model lm and the symbol table vowelized.txt are both in this directory, it was built by:
+./arpa2fst --read-symbol-table=vowelized.txt lm g.fst
+
+s.py repapres s.text by taking in a text file containing the unvowelized sentences, it only reads the first line for now:
+python s.py debug_lines_nv
+
+s.fst is built by:
+~/bin/fstcompile --acceptor -isymbols=unvowelized.txt s.text > s.fst
+
+
+Once the three FST's are built:
+
+./fstclosure v.fst > cv.fst
+(this is not needed, suggested by Hainan)
+./fstcompose cv.fst g.fst > cvg.fst
+./fstcompose s.fst cvg.fst > scvg.fst
+
+Finds the shortest path by:
+./fstshortestpath scvg.fsf short.fst
+
+Prints the shortest path
+./fstprint --isymbols=unvowelized.txt --osymbols=vowelized.txt short.fst
